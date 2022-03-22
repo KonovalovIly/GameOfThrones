@@ -1,5 +1,6 @@
 package com.ikonovalov.gameofthrones.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ikonovalov.gameofthrones.domain.Repository
@@ -21,8 +22,8 @@ class ListViewModel(repository: Repository): ViewModel() {
     }
 
     private fun getCharacters() {
-
         viewModelScope.launch {
+            Log.d("THREADLIST", this.coroutineContext.toString())
             val result = kotlin.runCatching { getCharacterListUseCase.invoke() }
             result.onSuccess { list ->
                 if (list.isEmpty()) _viewState.value = CharacterState.Empty

@@ -1,5 +1,6 @@
 package com.ikonovalov.gameofthrones.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ikonovalov.gameofthrones.domain.Repository
@@ -24,6 +25,7 @@ class DetailViewModel(repository: Repository) : ViewModel() {
         if (id == null) _viewState.value =
             CharacterDetailState.Error(IllegalStateException("No id provided"))
         else {
+            if (characterId != id.toInt()) resultResponse = false
             if (!resultResponse) {
                 characterId = id.toInt()
                 sendResponse()
@@ -33,6 +35,7 @@ class DetailViewModel(repository: Repository) : ViewModel() {
 
     private fun sendResponse() {
         viewModelScope.launch {
+            Log.d("THREADDETAIL", this.coroutineContext.toString())
             val result = kotlin.runCatching { getCharacterDetailUseCase.invoke(characterId) }
             result.onSuccess { character ->
                 _viewState.value = CharacterDetailState.Success(character)
