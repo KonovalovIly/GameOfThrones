@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface Repository {
 
-    fun getCharactersList(): Flow<List<CharacterWithImage>>
+    suspend fun getCharactersList(): List<CharacterWithImage>
 }

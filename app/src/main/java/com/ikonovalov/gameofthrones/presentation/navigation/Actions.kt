@@ -2,13 +2,13 @@ package com.ikonovalov.gameofthrones.presentation.navigation
 
 import androidx.navigation.NavController
 
-class Actions( navController: NavController) {
+class Actions(navController: NavController) {
 
     val goCharacterDetail: (String) -> Unit = {
-        navController.navigate("${Screen.CharacterDetail.route}/$it")
+        navController.navigate("${NavigationDestination.CharacterDetail.destination}/$it")
     }
 
     val goCharacterList: () -> Unit = {
-        navController.navigate(Screen.CharacterList.route)
+        navController.navigate(NavigationDestination.CharacterList.destination)
     }
 }

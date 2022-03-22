@@ -1,6 +1,7 @@
 package com.ikonovalov.gameofthrones.presentation.state
 
 import com.ikonovalov.gameofthrones.domain.entity.CharacterWithImage
+import kotlinx.coroutines.flow.Flow
 
 sealed class CharacterState {
     object Empty : CharacterState()
