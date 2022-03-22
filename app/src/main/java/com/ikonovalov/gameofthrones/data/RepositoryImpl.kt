@@ -13,4 +13,6 @@ class RepositoryImpl @Inject constructor(private val api: CharacterServiceWithIm
 
     override suspend fun getCharactersList(): List<CharacterWithImage> = api.getCharacters()
 
+    override suspend fun getCharacter(id: Int): CharacterWithImage = api.getCharacterDetail(id)
+
 }

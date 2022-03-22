@@ -15,10 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.ikonovalov.gameofthrones.presentation.ui.theme.Shapes
 import com.ikonovalov.gameofthrones.presentation.ui.theme.typography
 
+@ExperimentalCoilApi
 @Composable
 fun CharacterCardItem(
     fullName: String,

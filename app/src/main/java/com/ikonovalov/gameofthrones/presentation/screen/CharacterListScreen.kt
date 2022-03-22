@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import com.ikonovalov.gameofthrones.R
 import com.ikonovalov.gameofthrones.domain.entity.CharacterWithImage
 import com.ikonovalov.gameofthrones.presentation.components.CharacterCardItem
@@ -22,6 +23,7 @@ import com.ikonovalov.gameofthrones.presentation.ui.theme.typography
 import com.ikonovalov.gameofthrones.presentation.viewmodel.ListViewModel
 
 
+@ExperimentalCoilApi
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun CharacterListScreen(actions: Actions, viewModel: ListViewModel) {
@@ -33,13 +35,16 @@ fun CharacterListScreen(actions: Actions, viewModel: ListViewModel) {
         }
         CharacterState.Loading -> LoadingScreen()
         is CharacterState.Success -> {
-            CharactersList(item = result.data, actions = actions)
+            CharactersList(item = result.data){
+                actions.goCharacterDetail.invoke(it.toString())
+            }
         }
     }
 }
 
+@ExperimentalCoilApi
 @Composable
-fun CharactersList(item: List<CharacterWithImage>, actions: Actions) {
+fun CharactersList(item: List<CharacterWithImage>, onCharacterClick: (Int) -> Unit) {
     LazyColumn() {
         item {
             Text(
@@ -55,7 +60,7 @@ fun CharactersList(item: List<CharacterWithImage>, actions: Actions) {
                 title = character.title,
                 imageURL = character.image
             ) {
-                actions.goCharacterDetail.invoke(character.fullName)
+                onCharacterClick.invoke(character.id)
             }
         }
     }

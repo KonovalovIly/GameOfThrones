@@ -2,6 +2,7 @@ package com.ikonovalov.gameofthrones.di
 
 import com.ikonovalov.gameofthrones.data.RepositoryImpl
 import com.ikonovalov.gameofthrones.domain.Repository
+import com.ikonovalov.gameofthrones.presentation.viewmodel.DetailViewModel
 import com.ikonovalov.gameofthrones.presentation.viewmodel.ListViewModel
 import dagger.Binds
 import dagger.Module
@@ -13,6 +14,9 @@ class AppModule{
 
     @Provides
     fun provideListViewModel(repository: Repository): ListViewModel = ListViewModel(repository)
+
+    @Provides
+    fun provideDetailViewModel(repository: Repository): DetailViewModel = DetailViewModel(repository)
 
 }
 

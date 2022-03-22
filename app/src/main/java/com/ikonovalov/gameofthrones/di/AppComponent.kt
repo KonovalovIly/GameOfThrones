@@ -1,5 +1,6 @@
 package com.ikonovalov.gameofthrones.di
 
+import com.ikonovalov.gameofthrones.presentation.viewmodel.DetailViewModel
 import com.ikonovalov.gameofthrones.presentation.viewmodel.ListViewModel
 import dagger.Component
 
@@ -12,4 +13,6 @@ interface AppComponent{
     }
 
     fun getListViewModel(): ListViewModel
+
+    fun getDetailViewModel(): DetailViewModel
 }
