@@ -1,18 +1,14 @@
 package com.ikonovalov.gameofthrones.data
 
+import com.ikonovalov.gameofthrones.data.mappers.CharacterMapper
 import com.ikonovalov.gameofthrones.domain.Repository
 import com.ikonovalov.gameofthrones.domain.entity.CharacterWithImage
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class RepositoryImpl @Inject constructor(private val api: CharacterServiceWithImageApi): Repository {
+class RepositoryImpl @Inject constructor(private val api: CharacterServiceWithImageApi,private val mapper: CharacterMapper): Repository {
 
-    override suspend fun getCharactersList(): List<CharacterWithImage> = api.getCharacters()
+    override suspend fun getCharactersList(): List<CharacterWithImage> = mapper.mapCharacterDtoListToEntityList(api.getCharacters())
 
-    override suspend fun getCharacter(id: Int): CharacterWithImage = api.getCharacterDetail(id)
+    override suspend fun getCharacter(id: Int): CharacterWithImage = mapper.mapCharacterDtoToEntity(api.getCharacterDetail(id))
 
 }
