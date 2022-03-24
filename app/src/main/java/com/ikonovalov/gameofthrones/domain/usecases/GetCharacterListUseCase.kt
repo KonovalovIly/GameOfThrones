@@ -1,9 +1,11 @@
 package com.ikonovalov.gameofthrones.domain.usecases
 
 import com.ikonovalov.gameofthrones.domain.Repository
+import com.ikonovalov.gameofthrones.domain.entity.CharacterWithImage
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class GetCharacterListUseCase(private val repository: Repository) {
+class GetCharacterListUseCase @Inject constructor(private val repository: Repository) {
 
-    operator fun invoke() = repository.getCharactersList()
-
+    suspend operator fun invoke(): List<CharacterWithImage> = repository.getCharactersList()
 }

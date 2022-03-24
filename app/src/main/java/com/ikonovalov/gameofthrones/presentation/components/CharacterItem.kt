@@ -8,19 +8,19 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.ikonovalov.gameofthrones.presentation.ui.theme.GameOfThronesTheme
 import com.ikonovalov.gameofthrones.presentation.ui.theme.Shapes
 import com.ikonovalov.gameofthrones.presentation.ui.theme.typography
 
+@ExperimentalCoilApi
 @Composable
 fun CharacterCardItem(
     fullName: String,
@@ -33,7 +33,7 @@ fun CharacterCardItem(
         modifier = modifier
             .wrapContentHeight()
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onCardClick),
         shape = Shapes.large,
@@ -46,13 +46,15 @@ fun CharacterCardItem(
             verticalAlignment = Alignment.CenterVertically,
         )
         {
+            val image = "https://thronesapi.com/assets/images/$imageURL"
             Image(
-                painter = rememberImagePainter(data = imageURL),
+                painter = rememberImagePainter(data = image),
                 contentDescription = null,
                 modifier = Modifier
                     .size(100.dp)
                     .padding(12.dp)
-                    .clip(CircleShape)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(16.dp))
             TextColumn(fullName = fullName, title = title)
