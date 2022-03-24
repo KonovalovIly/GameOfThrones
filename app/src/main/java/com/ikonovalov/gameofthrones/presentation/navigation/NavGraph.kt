@@ -1,6 +1,7 @@
 package com.ikonovalov.gameofthrones.presentation.navigation
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavType
@@ -28,6 +29,9 @@ fun NavGraph() {
     val actions = remember(navigationController) { Actions(navigationController) }
     val component = DaggerAppComponent.builder().build()
 
+    val detailViewModel: DetailViewModel = daggerViewModel {
+        component.getDetailViewModel()
+    }
 
     NavHost(
         navController = navigationController,
@@ -38,6 +42,7 @@ fun NavGraph() {
             val listViewModel: ListViewModel = daggerViewModel {
                 component.getListViewModel()
             }
+            Log.d("COMPOSABLE", listViewModel.toString())
             CharacterListScreen(actions, listViewModel)
         }
 
@@ -45,9 +50,8 @@ fun NavGraph() {
             arguments = listOf(navArgument(EndPoint.ID) { type = NavType.StringType })
         ) {
             val id = it.arguments?.getString(EndPoint.ID)
-            val detailViewModel: DetailViewModel = daggerViewModel {
-                component.getDetailViewModel()
-            }
+
+            Log.d("COMPOSABLE", detailViewModel.toString())
             CharacterDetailScreen(viewModel = detailViewModel, id = id)
         }
 

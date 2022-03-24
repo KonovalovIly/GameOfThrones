@@ -1,10 +1,12 @@
 package com.ikonovalov.gameofthrones.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ikonovalov.gameofthrones.domain.Repository
 import com.ikonovalov.gameofthrones.domain.usecases.GetCharacterDetailUseCase
 import com.ikonovalov.gameofthrones.presentation.state.CharacterDetailState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -24,6 +26,7 @@ class DetailViewModel(repository: Repository) : ViewModel() {
         if (id == null) _viewState.value =
             CharacterDetailState.Error(IllegalStateException("No id provided"))
         else {
+            if (characterId != id.toInt()) resultResponse = false
             if (!resultResponse) {
                 characterId = id.toInt()
                 sendResponse()
@@ -32,7 +35,8 @@ class DetailViewModel(repository: Repository) : ViewModel() {
     }
 
     private fun sendResponse() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
+            Log.d("THREADDETAIL", this.coroutineContext.toString() + Thread.currentThread().name)
             val result = kotlin.runCatching { getCharacterDetailUseCase.invoke(characterId) }
             result.onSuccess { character ->
                 _viewState.value = CharacterDetailState.Success(character)
