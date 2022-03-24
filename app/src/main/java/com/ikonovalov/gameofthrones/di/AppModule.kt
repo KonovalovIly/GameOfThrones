@@ -2,6 +2,8 @@ package com.ikonovalov.gameofthrones.di
 
 import com.ikonovalov.gameofthrones.data.RepositoryImpl
 import com.ikonovalov.gameofthrones.domain.Repository
+import com.ikonovalov.gameofthrones.domain.usecases.GetCharacterDetailUseCase
+import com.ikonovalov.gameofthrones.domain.usecases.GetCharacterListUseCase
 import com.ikonovalov.gameofthrones.presentation.viewmodel.DetailViewModel
 import com.ikonovalov.gameofthrones.presentation.viewmodel.ListViewModel
 import dagger.Binds
@@ -13,10 +15,10 @@ import dagger.Provides
 class AppModule{
 
     @Provides
-    fun provideListViewModel(repository: Repository): ListViewModel = ListViewModel(repository)
+    fun provideListViewModel(getCharacterListUseCase: GetCharacterListUseCase): ListViewModel = ListViewModel(getCharacterListUseCase)
 
     @Provides
-    fun provideDetailViewModel(repository: Repository): DetailViewModel = DetailViewModel(repository)
+    fun provideDetailViewModel(getCharacterDetailUseCase: GetCharacterDetailUseCase): DetailViewModel = DetailViewModel(getCharacterDetailUseCase)
 
 }
 
