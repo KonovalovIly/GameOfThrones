@@ -7,12 +7,12 @@ import javax.inject.Inject
 
 class CharacterMapper @Inject constructor() {
 
-    fun mapCharacterDtoObserverListToEntityListObserver(characterListDto: Single<List<CharacterDto>>): Single<List<CharacterWithImage>> =
-        characterListDto.map { list -> list.map { mapCharacterDtoToEntity(it) } }
+    fun mapCharacterDtoObserverListToEntityListObserver(characterListDto: List<CharacterDto>): List<CharacterWithImage> =
+        characterListDto.map { mapCharacterDtoToEntity(it) }
 
 
-    fun mapCharacterObserverDtoToEntityObserver(characterDto: Single<CharacterDto>): Single<CharacterWithImage> =
-        characterDto.map { char -> mapCharacterDtoToEntity(char) }
+    fun mapCharacterObserverDtoToEntityObserver(characterDto: CharacterDto): CharacterWithImage =
+        mapCharacterDtoToEntity(characterDto)
 
     private fun mapCharacterDtoToEntity(characterDto: CharacterDto): CharacterWithImage =
         CharacterWithImage(

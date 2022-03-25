@@ -12,9 +12,11 @@ class RepositoryImpl @Inject constructor(
 ) : Repository {
 
     override fun getCharactersList(): Single<List<CharacterWithImage>> =
-        mapper.mapCharacterDtoObserverListToEntityListObserver(api.getCharacters())
+        api.getCharacters().map { mapper.mapCharacterDtoObserverListToEntityListObserver(it) }
+
 
     override fun getCharacter(id: Int): Single<CharacterWithImage> =
-        mapper.mapCharacterObserverDtoToEntityObserver(api.getCharacterDetail(id))
+        api.getCharacterDetail(id).map { mapper.mapCharacterObserverDtoToEntityObserver(it) }
+
 }
 
