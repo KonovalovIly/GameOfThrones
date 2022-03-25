@@ -1,11 +1,11 @@
 package com.ikonovalov.gameofthrones.domain
 
 import com.ikonovalov.gameofthrones.domain.entity.CharacterWithImage
-import kotlinx.coroutines.flow.Flow
+import io.reactivex.Single
 
 interface Repository {
 
-    suspend fun getCharactersList(): List<CharacterWithImage>
+    fun getCharactersList(): Single<List<CharacterWithImage>>
 
-    suspend fun getCharacter(id: Int): CharacterWithImage
+    fun getCharacter(id: Int): Single<CharacterWithImage>
 }

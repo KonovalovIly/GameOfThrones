@@ -2,16 +2,19 @@ package com.ikonovalov.gameofthrones.data.mappers
 
 import com.ikonovalov.gameofthrones.data.entity.CharacterDto
 import com.ikonovalov.gameofthrones.domain.entity.CharacterWithImage
+import io.reactivex.Single
 import javax.inject.Inject
 
 class CharacterMapper @Inject constructor() {
 
-
-    fun mapCharacterDtoListToEntityList(characterListDto: List<CharacterDto>): List<CharacterWithImage> =
+    fun mapCharacterDtoObserverListToEntityListObserver(characterListDto: List<CharacterDto>): List<CharacterWithImage> =
         characterListDto.map { mapCharacterDtoToEntity(it) }
 
 
-    fun mapCharacterDtoToEntity(characterDto: CharacterDto): CharacterWithImage =
+    fun mapCharacterObserverDtoToEntityObserver(characterDto: CharacterDto): CharacterWithImage =
+        mapCharacterDtoToEntity(characterDto)
+
+    private fun mapCharacterDtoToEntity(characterDto: CharacterDto): CharacterWithImage =
         CharacterWithImage(
             characterDto.id,
             characterDto.firstName,

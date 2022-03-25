@@ -1,19 +1,20 @@
 package com.ikonovalov.gameofthrones.data
 
 import com.ikonovalov.gameofthrones.data.entity.CharacterDto
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface CharacterServiceWithImageApi {
 
     @GET(CHARACTER_LIST_RESPONSE)
-    suspend fun getCharacters(): List<CharacterDto>
+    fun getCharacters(): Single<List<CharacterDto>>
 
 
     @GET(CHARACTER_DETAIL_RESPONSE)
-    suspend fun getCharacterDetail(
+    fun getCharacterDetail(
         @Path("id") id: Int
-    ): CharacterDto
+    ): Single<CharacterDto>
 
     companion object {
         const val CHARACTER_LIST_RESPONSE = "api/v2/Characters"
