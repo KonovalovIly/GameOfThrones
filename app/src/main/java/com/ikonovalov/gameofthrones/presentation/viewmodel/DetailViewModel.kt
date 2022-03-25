@@ -1,22 +1,24 @@
 package com.ikonovalov.gameofthrones.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.ikonovalov.gameofthrones.domain.Repository
+import com.ikonovalov.gameofthrones.domain.entity.CharacterWithImage
 import com.ikonovalov.gameofthrones.domain.usecases.GetCharacterDetailUseCase
 import com.ikonovalov.gameofthrones.presentation.state.CharacterDetailState
-import kotlinx.coroutines.Dispatchers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 class DetailViewModel(repository: Repository) : ViewModel() {
 
-    private val _viewState = MutableStateFlow<CharacterDetailState>(CharacterDetailState.Loading)
+    private var _viewState= MutableStateFlow<CharacterDetailState> (CharacterDetailState.Loading)
     val characterDetail = _viewState.asStateFlow()
 
     private val getCharacterDetailUseCase = GetCharacterDetailUseCase(repository)
+
+    private val compositeDisposable = CompositeDisposable()
 
     private var characterId: Int = 0
 
@@ -35,20 +37,29 @@ class DetailViewModel(repository: Repository) : ViewModel() {
     }
 
     private fun sendResponse() {
-        viewModelScope.launch(Dispatchers.Default) {
-            Log.d("THREADDETAIL", this.coroutineContext.toString() + Thread.currentThread().name)
-            val result = kotlin.runCatching { getCharacterDetailUseCase.invoke(characterId) }
-            result.onSuccess { character ->
-                _viewState.value = CharacterDetailState.Success(character)
-                resultResponse = true
-            }
-            result.onFailure {
-                _viewState.value = CharacterDetailState.Error(it)
-            }
-        }
+        compositeDisposable.add(
+            getCharacterDetailUseCase.invoke(characterId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                           onSuccess(it)
+                },{
+                    _viewState.value = CharacterDetailState.Error(it)
+                })
+        )
+    }
+
+    private fun onSuccess(char: CharacterWithImage){
+        if (char.id == 0) _viewState.value = CharacterDetailState.Empty
+        else _viewState.value = CharacterDetailState.Success(char)
     }
 
     fun updateResponse() {
         sendResponse()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }
