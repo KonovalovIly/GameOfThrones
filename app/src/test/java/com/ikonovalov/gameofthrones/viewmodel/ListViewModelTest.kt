@@ -7,7 +7,7 @@ import com.ikonovalov.gameofthrones.presentation.viewmodel.ListViewModel
 import io.mockk.coEvery
 import io.mockk.mockk
 import junit.framework.Assert.assertEquals
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
@@ -54,14 +54,13 @@ class ListViewModelTest {
                 )
             )
         )
-        delay(1)
-        assertEquals(viewModel.characters.value,rightState)
+        assertEquals(viewModel.characters.first(),rightState)
     }
 
     @Test
-    fun `check characterListState if loading`() {
+    fun `check characterListState if loading`() = runBlocking {
         val rightState = CharacterState.Loading
-        assertEquals(viewModel.characters.value,rightState)
+        assertEquals(viewModel.characters.first(),rightState)
     }
 
     @Test
@@ -72,8 +71,7 @@ class ListViewModelTest {
         viewModel.updateResponse()
         val rightState = CharacterState.Empty
 
-        delay(1)
-        assertEquals(viewModel.characters.value,rightState)
+        assertEquals(viewModel.characters.first(),rightState)
     }
 
     @Test
@@ -84,10 +82,9 @@ class ListViewModelTest {
 
         viewModel.updateResponse()
 
-        delay(1)
         val rightState = CharacterState.Error(exp)
 
-        assertEquals(viewModel.characters.value,rightState)
+        assertEquals(viewModel.characters.first(),rightState)
     }
 
 }

@@ -7,7 +7,11 @@ import com.ikonovalov.gameofthrones.presentation.viewmodel.DetailViewModel
 import io.mockk.coEvery
 import io.mockk.mockk
 import junit.framework.Assert.assertEquals
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.coroutines.CoroutineContext
 
@@ -52,8 +56,7 @@ class DetailViewModelTest : CoroutineScope {
                 imageURL = "imageUrl",
             )
         )
-        delay(1)
-        assertEquals(viewModel.characterDetail.value, rightState)
+        assertEquals(viewModel.characterDetail.first(), rightState)
     }
 
     @Test
@@ -61,7 +64,7 @@ class DetailViewModelTest : CoroutineScope {
 
         viewModel.updateResponse()
         val rightState = CharacterDetailState.Loading
-        assertEquals(viewModel.characterDetail.value, rightState)
+        assertEquals(viewModel.characterDetail.first(), rightState)
     }
 
     @Test
@@ -72,10 +75,10 @@ class DetailViewModelTest : CoroutineScope {
         } throws error
 
         viewModel.updateResponse()
-        delay(1)
+
         val rightState = CharacterDetailState.Error(error)
 
-        assertEquals(viewModel.characterDetail.value, rightState)
+        assertEquals(viewModel.characterDetail.first(), rightState)
     }
 
     @Test
@@ -83,8 +86,8 @@ class DetailViewModelTest : CoroutineScope {
         viewModel.getCharacterDetail(null)
         // Проверяем ответ
         val rightState = CharacterDetailState.Error(IllegalStateException("No id provided"))
-        delay(1)
-        assertEquals(viewModel.characterDetail.value.toString(), rightState.toString())
+
+        assertEquals(viewModel.characterDetail.first().toString(), rightState.toString())
     }
 
 }
